@@ -10,7 +10,6 @@ class TestBooksCollector:
         books_collector.add_new_book(data_book_name)
 
         assert len(books_collector.books_genre) == 1
-    
 
     @pytest.mark.parametrize('book_lenght', [0, 41, 1000])
     def test_add_new_book_incorrect_name_book_not_added(self, books_collector, book_lenght):
@@ -31,18 +30,17 @@ class TestBooksCollector:
 
         assert books_collector.books_genre[data_book_name] == ''
 
+    def test_set_book_genre_not_exist_name_correct_genre_not_set(self, books_collector):
+        books_collector.add_new_book(data_book_name)
+        books_collector.set_book_genre('ааааааааа', data_genre)
+
+        assert books_collector.books_genre[data_book_name] != data_genre
 
     def test_get_book_genre_book_with_genre_return_genre(self, books_collector):
         books_collector.add_new_book(data_book_name)
         books_collector.set_book_genre(data_book_name, data_genre)
 
         assert books_collector.get_book_genre(data_book_name) == data_genre
-
-    def test_set_book_genre_not_exist_name_correct_genre_not_set(self, books_collector):
-        books_collector.add_new_book(data_book_name)
-        books_collector.set_book_genre('ааааааааа', data_genre)
-
-        assert books_collector.books_genre[data_book_name] != data_genre
 
     def test_get_book_genre_not_exist_genre_return_none(self, books_collector):
         books_collector.add_new_book(data_book_name)
@@ -120,7 +118,7 @@ class TestBooksCollector:
 
         assert books_collector.favorites == []
 
-    def test_delete_book_from_favorites_delete_not_axist_book_not_deleted(self, books_collector):
+    def test_delete_book_from_favorites_delete_not_exist_book_not_deleted(self, books_collector):
         list_book = generate_list_book(3)
         for i in range(len(list_book) - 1):
             books_collector.add_new_book(list_book[i])
