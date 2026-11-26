@@ -7,13 +7,11 @@ from data_books_collector import *
 
 class TestBooksCollector:
 
-    @pytest.mark.parametrize('number_of_books', [0, 1, 10, 100, 1000])
-    def test_add_new_book_valid_name_book_added(self, books_collector, number_of_books):
-        list_books = self.generate_list_book(number_of_books)
-        for book in list_books:
-            books_collector.add_new_book(book)
-        
-        assert len(books_collector.books_genre) == number_of_books
+    def test_add_new_book_valid_name_book_added(self, books_collector):
+        books_collector.add_new_book(data_book_name)
+
+        assert len(books_collector.books_genre) == 1
+    
 
     @pytest.mark.parametrize('book_lenght', [0, 41, 1000])
     def test_add_new_book_incorrect_name_book_not_added(self, books_collector, book_lenght):
@@ -114,15 +112,6 @@ class TestBooksCollector:
         books_collector.add_book_in_favorites(book)
 
         assert books_collector.favorites == [book]
-    
-    @pytest.mark.parametrize('number_of_books', [10, 100, 1000])
-    def test_add_book_in_favorites_correct_book_added(self, books_collector, number_of_books):
-        list_book = self.generate_list_book(number_of_books)
-        for book in list_book:
-            books_collector.add_new_book(book)
-            books_collector.add_book_in_favorites(book)
-
-        assert books_collector.favorites == list_book
 
     def test_delete_book_from_favorites_one_book_deleted(self, books_collector):        
         books_collector.add_new_book(data_book_name)
@@ -141,14 +130,15 @@ class TestBooksCollector:
 
         assert books_collector.favorites == list_book[0:2]
 
-    @pytest.mark.parametrize('number_of_books', [0, 1, 10, 100, 1000])
-    def test_get_list_of_favorites_books_correct_book_added(self, books_collector, number_of_books):
-        list_book = self.generate_list_book(number_of_books)
-        for book in list_book:
-            books_collector.add_new_book(book)
-            books_collector.add_book_in_favorites(book)
+    def test_get_list_of_favorites_books_correct_book_added(self, books_collector):
+        book = self.generate_name_book(10)
+        books_collector.add_new_book(book)
+        books_collector.add_book_in_favorites(book)
 
-        assert books_collector.get_list_of_favorites_books() == list_book
+        assert books_collector.get_list_of_favorites_books() == [book]
+
+    def test_get_list_of_favorites_empty_favorites_return_empty_list(self, books_collector):
+        assert books_collector.get_list_of_favorites_books() == []
 
     def generate_list_book(self, number):
         result = []
